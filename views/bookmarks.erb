@@ -6,12 +6,20 @@
       <a href="<%= bookmark.url %>" target="_blank">
         <%= bookmark.title %>
       </a>
+      <% bookmark.comments.each do |comment| %>
+      <ul>
+        <li><%= comment.text %></li>
+      </ul>
+      <% end %>
       <form action="/bookmarks/<%= bookmark.id %>" method="post">
         <input type='hidden' name='_method' value='DELETE'/>
         <input type="submit" value="Delete" />
       </form>
       <form action="/bookmarks/<%= bookmark.id %>/edit" method="get">
         <input type="submit" value="Edit" />
+      </form>
+      <form action="/bookmarks/<%= bookmark.id %>/comment" method="get">
+        <input type="submit" value="Add Comment" />
       </form>
     </li>
   <% end %>

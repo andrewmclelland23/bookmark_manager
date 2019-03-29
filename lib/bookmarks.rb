@@ -1,14 +1,16 @@
 require 'pg'
 require_relative 'database_connection_setup'
+require_relative 'comment'
 
 class Bookmarks
 
-  attr_reader :title, :url, :id
+  attr_reader :title, :url, :id, :comments
 
-  def initialize(title, url, id)
+  def initialize(title, url, id, comment = Comment)
     @title = title
     @url = url
     @id = id
+    @comments = comment.find(id)
   end
 
   def self.display_all
@@ -19,12 +21,14 @@ class Bookmarks
 
   def self.add_bookmark(url, title)
     return false unless is_url?(url)
+
     result = DatabaseConnection.query("INSERT INTO bookmarks (url, title) VALUES ('#{url}', '#{title}') RETURNING id, title, url;")
     Bookmarks.new(result[0]['title'], result[0]['url'], result[0]['id'])
   end
 
-  def self.delete_bookmark(id:)
-  DatabaseConnection.query("DELETE FROM bookmarks WHERE id = #{id};")
+  def self.delete_bookmark(id:, comment: Comment)
+    comment.delete(id)
+    DatabaseConnection.query("DELETE FROM bookmarks WHERE id = #{id};")
   end
 
   def self.update_bookmark(title:, url:, id:)
