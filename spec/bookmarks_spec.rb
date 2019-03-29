@@ -20,7 +20,7 @@ describe Bookmarks do
   end
 
   describe '#add_bookmark' do
-    it 'Should add a bookmarks' do
+    it 'Should add a bookmarks if url is valid' do
       bookmark = list.add_bookmark('http://www.google.com', 'Google')
       persisted_data = persisted_data(id: bookmark.id)
 
@@ -28,6 +28,11 @@ describe Bookmarks do
       expect(bookmark.id).to eq persisted_data['id']
       expect(bookmark.title).to eq 'Google'
       expect(bookmark.url).to eq 'http://www.google.com'
+    end
+    it 'Should not add a bookmark if url is invalid' do
+      bookmark = list.add_bookmark('www.google.com', 'Google')
+
+      expect(Bookmarks.display_all).to eq []
     end
   end
 

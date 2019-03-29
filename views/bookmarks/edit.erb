@@ -2,11 +2,11 @@
   <input type="hidden" name="_method" value="PATCH" />
   <div>
     URL:
-    <input type="text" name="url" />
+    <input type="text" name="url" value='<%= @bookmark.url %>' />
   </div>
   <div>
     Title:
-    <input type="text" name="title" />
+    <input type="text" name="title" value='<%= @bookmark.title %>'/>
   </div>
   <input type="submit" value="Submit" />
 </form>
